@@ -37,6 +37,16 @@
   (require 'cl-lib)
   (require 'treemacs-macros))
 
+(defgroup treemacs-mouse nil
+  "Treemacs+mouse configuration options."
+  :group 'treemacs-mouse
+  :prefix "treemacs-mouse-")
+
+(defcustom treemacs-mouse-move-files-by-dragging t
+  "If non-nil, move files by dragging with your mouse inside treemacs."
+  :group 'treemacs-mouse
+  :type 'boolean)
+
 (treemacs-import-functions-from "treemacs-interface"
   treemacs-add-project-to-workspace)
 
@@ -178,7 +188,8 @@ TARGET-POS: End position of the mouse drag."
                             (treemacs--parent-dir target-key))))
          (target-file (and source-key target-key
                            (treemacs-join-path target-dir (treemacs--filename source-key)))))
-    (when (and source-key target-key
+    (when (and treemacs-mouse-move-files-by-dragging
+               source-key target-key
                (not (string= source-key target-key))
                (not (treemacs-is-path source-key :directly-in target-dir)))
       (treemacs-do-delete-single-node source-key)
